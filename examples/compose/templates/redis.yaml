@@ -1,0 +1,9 @@
+services:
+  redis:
+    labels: 
+      app: redis
+    command:
+    - redis-server
+    deploy:
+      replicas: 1
+    image: redis:6.0.9

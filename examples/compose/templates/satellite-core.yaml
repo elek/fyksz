@@ -1,0 +1,30 @@
+services:
+  satellite-core:
+    labels:
+      app: satellite
+    command:
+    - satellite
+    - run
+    - --defaults=dev
+    - --identity-dir=/var/lib/storj/.local/share/storj/identity/satellite-api/
+    deploy:
+      replicas: 1
+    environment:
+      STORJUP_AUTHSERVICE: http://authservice:8888
+      STORJUP_ROLE: satellite-core
+      STORJUP_SATELLITE: satellite-api
+      STORJ_DATABASE: cockroach://root@cockroach:26257/master?sslmode=disable
+      STORJ_DEBUG_ADDR: 0.0.0.0:11111
+      STORJ_DEFAULTS: dev
+      STORJ_IDENTITY_DIR: /var/lib/storj/.local/share/storj/identity/satellite-api/
+      STORJ_LIVE_ACCOUNTING_STORAGE_BACKEND: redis://redis:6379?db=1
+      STORJ_LOG_LEVEL: debug
+      STORJ_MAIL_FROM: Storj <storj-up@storj.io>
+      STORJ_MAIL_SMTP_SERVER_ADDRESS: smtp.gmail.com:587
+      STORJ_METAINFO_DATABASE_URL: cockroach://root@cockroach:26257/metainfo?sslmode=disable
+      STORJ_METRICS_APP_SUFFIX: sim
+      STORJ_ORDERS_ENCRYPTION_KEYS: 0100000000000000=0100000000000000000000000000000000000000000000000000000000000000
+      STORJ_ROLE: satellite-core
+      STORJ_WAIT_FOR_SATELLITE: "true"
+    image: img.dev.storj.io/storjup/storj:1.100.4
+

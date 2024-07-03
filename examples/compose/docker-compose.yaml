@@ -1,0 +1,25 @@
+version: "3.4"
+services:
+  redis:
+    labels:
+      app: redis
+    command:
+      - redis-server
+    deploy:
+      replicas: 1
+    image: xxx
+  cockroach:
+    labels:
+      app: cockroach
+    command:
+      - start-single-node
+      - --insecure
+      - --http-addr=localhost:8086
+      - --store="/tmp/cockroach"
+    deploy:
+      replicas: 1
+    image: xxx
+    ports:
+      - mode: ingress
+        target: 26257
+        published: 26257
