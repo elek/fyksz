@@ -1,0 +1,4 @@
+yq '.' resources/*.yaml
+@repeat --pattern XX --elements 01,02,03,03,04,05,06,08
+yq '. | select(.metadata.name == "storj08")' @@ ./log-level.sh 
+@save --name "@k8s name"

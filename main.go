@@ -12,6 +12,7 @@ type cli struct {
 	Save       Save    `cmd:"" usage:"Save each stream element to a separated file"`
 	Kubernetes k8s.K8s `cmd:"" usage:"helpers to transform K8s resources files" aliases:"k8s"`
 	Run        Run     `cmd:"" usage:"run steps from build.fyksz file"`
+	Repeat     Repeat  `cmd:"" usage:"repeat existing templates multiple times"`
 }
 
 func main() {
