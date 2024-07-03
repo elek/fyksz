@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"github.com/google/shlex"
 	"github.com/pkg/errors"
 	"io"
 	"os"
@@ -35,20 +34,18 @@ func (s Save) Run() error {
 	for ix, segment := range strings.Split(string(input), "\n"+s.SplitLine+"\n") {
 		name := ""
 		if s.Name != "" {
-			namer, err := shlex.Split(s.Name)
-			if err != nil {
-				return errors.WithStack(err)
-			}
-			nameCommand := exec.Command(namer[0], namer[1:]...)
+			nameCommand := exec.Command("/usr/bin/bash", "-c", resolveAbbrev(s.Name))
 			nameCommand.Stdin = bytes.NewBuffer([]byte(segment))
 			nameOutput, err := nameCommand.CombinedOutput()
 			if err != nil {
-				fmt.Printf("Namer is failed: %s", s.Name)
-				fmt.Println("---stdin---")
-				fmt.Println(segment)
-				fmt.Println("---combined output---")
-				fmt.Println(nameOutput)
-				fmt.Println("---")
+				details := ""
+				details += fmt.Sprintf("Namer is failed: %s\n", s.Name)
+				details += fmt.Sprintln("---stdin---")
+				details += fmt.Sprintln(segment)
+				details += fmt.Sprintln("---combined output---")
+				details += fmt.Sprintln(string(nameOutput))
+				details += fmt.Sprintln("---")
+				os.Stderr.WriteString(details)
 				return errors.WithStack(err)
 			}
 			name = strings.TrimSpace(string(nameOutput))

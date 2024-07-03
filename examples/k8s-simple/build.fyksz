@@ -1,0 +1,2 @@
+yq '.' resources/*.yaml
+@save --name "@k8s name"
