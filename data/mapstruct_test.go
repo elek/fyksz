@@ -39,7 +39,7 @@ func TestGet(t *testing.T) {
 func TestReSetReal(t *testing.T) {
 	path := NewPath("metadata", "name")
 	value := "n1"
-	reset1 := ReSet{Path: path, NewValue: value}
+	reset1 := Set{Path: path, NewValue: value}
 	node, err := ReadManifestFile("../../testdata/mapstruct/reset.yaml")
 	assert.Nil(t, err)
 	node.Accept(&reset1)
@@ -53,7 +53,7 @@ func TestReSetReal(t *testing.T) {
 
 func TestReSetMissing(t *testing.T) {
 	path := NewPath("metadata", "namespace")
-	reset1 := ReSet{Path: path, NewValue: "n1"}
+	reset1 := Set{Path: path, NewValue: "n1"}
 	node, err := ReadManifestFile("../../testdata/mapstruct/reset.yaml")
 	assert.Nil(t, err)
 	node.Accept(&reset1)

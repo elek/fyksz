@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storagenode01
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: storagenode01
+  template:
+    metadata:
+      labels:
+        app: storagenode01
+    spec:
+      containers:
+        - image: foobar

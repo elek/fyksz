@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storagenode01
+  annotations:
+    fyksz-config-hash/hdfs-config: 6844298a2c07e301a0ce6e31d26e5bac
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: storagenode01
+  template:
+    metadata:
+      labels:
+        app: storagenode01
+    spec:
+      containers:
+      - image: foobar
+      volumes:
+      - name: config
+        configMap:
+          name: hdfs-config
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hdfs-config
+data:
+  foo: bar

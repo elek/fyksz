@@ -1,9 +1,10 @@
-package main
+package cmd
 
 import (
 	"bytes"
 	"fmt"
 	"github.com/pkg/errors"
+	"io"
 	"os"
 	"os/exec"
 	"strings"
@@ -17,8 +18,21 @@ func (s Run) Run() error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	var input []byte
-	for _, line := range strings.Split(string(raw), "\n") {
+	in, err := io.ReadAll(os.Stdin)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	output, err := RunString(string(raw), in)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	fmt.Println(output)
+	return nil
+}
+
+func RunString(def string, in []byte) (output string, err error) {
+	input := in
+	for _, line := range strings.Split(def, "\n") {
 		line = strings.TrimSpace(line)
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
@@ -32,13 +46,12 @@ func (s Run) Run() error {
 		_, _ = os.Stderr.WriteString("Executing " + line + "\n")
 		err = cmd.Run()
 		if err != nil {
-			return errors.WithStack(err)
+			return string(input), errors.WithStack(err)
 		}
 		input = result.Bytes()
 
 	}
-	fmt.Println(string(input))
-	return nil
+	return string(input), nil
 }
 
 func resolveAbbrev(line string) string {
